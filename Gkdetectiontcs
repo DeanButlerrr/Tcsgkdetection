@@ -1,0 +1,31 @@
+--[[
+    Ball Landing Predictor by @yourname
+    Usage: loadstring(game:HttpGet("https://yourgithub.com/repo/script.lua"))()
+--]]
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Ball = workspace:WaitForChild("SoccerBall") -- Change to your ball's name
+
+-- Ghost Ball Setup
+local ghostBall = Instance.new("Part")
+ghostBall.Anchored = true
+ghostBall.CanCollide = false
+ghostBall.Transparency = 0.6
+ghostBall.Shape = Enum.PartType.Ball
+ghostBall.Size = Ball.Size
+ghostBall.Color = Color3.fromRGB(0, 255, 255) -- Cyan glow
+ghostBall.Material = Enum.Material.ForceField
+ghostBall.Name = "PredictedBall"
+ghostBall.Parent = workspace
+
+-- Prediction Settings
+local gravity = workspace.Gravity
+
+local function predictLandingPosition(ball)
+	local pos = ball.Position
+	local vel = ball.AssemblyLinearVelocity
+
+	-- Estimate time until ball hits the ground
+	local time = (-vel.Y - math.sqrt(vel.Y^2 + 2 * gravity * (pos.Y -
